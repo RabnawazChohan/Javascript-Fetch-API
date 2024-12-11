@@ -3,11 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>API Data Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f4f4f4;
+            text-align: left;
+        }
+        .heading{
+            text-align: center; 
+            background-color: #f4f4f4;
+        }
+    </style>
 </head>
 <body>
     
-    <h1>Welcome.</h1>
-
+    <h1 class="heading">
+        Data from javascript<span class="lblId"></span>
+    </h1>
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>City</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be populated here -->
+        </tbody>
+    </table>
+    <div style="text-align: center; margin: 20px;">
+        <button id="prev" disabled>Previous</button>
+        <span id="page-links"></span>
+        <button id="next">Next</button>
+    </div>
+    
+    
+    <script>
+        const apiUrl = 'https://jsonplaceholder.typicode.com/users';
+        const tableBody = document.getElementById('data-table').querySelector('tbody');
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+        const pageLinksContainer = document.getElementById('page-links');
+        const recordsPerPage = 3; // Number of records to display per page
+        let currentPage = 1;
+        let totalPages = 0;
+        const maxPageLinks = 20; // Maximum number of page links to display at a time
+        let data = [];
+    
+        // Fetch Data from API
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(json => {
+                data = json; // Store the data
+                totalPages = Math.ceil(data.length / recordsPerPage);
+                displayPage(currentPage); // Display the first page
+                generatePageLinks(); // Generate page links
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    
+        // Function to display a specific page
+        function displayPage(page) {
+            tableBody.innerHTML = ''; // Clear existing rows
+            const start = (page - 1) * recordsPerPage;
+            const end = start + recordsPerPage;
+            const pageData = data.slice(start, end); // Get the data for the current page
+    
+            pageData.forEach(user => {
+                const row = document.createElement('tr');
+    
+                const idCell = document.createElement('td');
+                const nameCell = document.createElement('td');
+                const emailCell = document.createElement('td');
+                const addressCell = document.createElement('td');
+                const phoneCell = document.createElement('td');
+                const buttonCell = document.createElement('td');
+    
+                idCell.textContent = user.id;
+                nameCell.textContent = user.name;
+                emailCell.textContent = user.email;
+                addressCell.textContent = user.address.city;
+                phoneCell.textContent = user.phone;
+    
+                const button = document.createElement('button');
+                button.textContent = 'View';
+                button.onclick = () => {
+                    document.querySelector('.heading').textContent = `Selected ID - ${user.id}`;
+                };
+    
+                buttonCell.appendChild(button);
+    
+                row.appendChild(idCell);
+                row.appendChild(nameCell);
+                row.appendChild(emailCell);
+                row.appendChild(addressCell);
+                row.appendChild(phoneCell);
+                row.appendChild(buttonCell);
+    
+                tableBody.appendChild(row);
+            });
+    
+            // Update button states
+            prevButton.disabled = page === 1;
+            nextButton.disabled = page === totalPages;
+    
+            // Update page links if necessary
+            generatePageLinks();
+        }
+    
+        // Function to generate dynamic page links
+        function generatePageLinks() {
+            pageLinksContainer.innerHTML = ''; // Clear existing links
+            const startPage = Math.floor((currentPage - 1) / maxPageLinks) * maxPageLinks + 1;
+            const endPage = Math.min(startPage + maxPageLinks - 1, totalPages);
+    
+            for (let i = startPage; i <= endPage; i++) {
+                const pageLink = document.createElement('a');
+                pageLink.textContent = i;
+                pageLink.href = '#';
+                pageLink.style.margin = '0 5px';
+                pageLink.style.textDecoration = i === currentPage ? 'underline' : 'none';
+                pageLink.onclick = (e) => {
+                    e.preventDefault();
+                    currentPage = i;
+                    displayPage(currentPage);
+                };
+                pageLinksContainer.appendChild(pageLink);
+            }
+    
+            if (endPage < totalPages) {
+                const moreLink = document.createElement('a');
+                moreLink.textContent = '...';
+                moreLink.href = '#';
+                moreLink.style.margin = '0 5px';
+                moreLink.onclick = (e) => {
+                    e.preventDefault();
+                    currentPage = endPage + 1;
+                    displayPage(currentPage);
+                    generatePageLinks();
+                };
+                pageLinksContainer.appendChild(moreLink);
+            }
+        }
+    
+        // Event listeners for pagination buttons
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayPage(currentPage);
+            }
+        });
+    
+        nextButton.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayPage(currentPage);
+            }
+        });
+    </script>
+    
+    
+    
 </body>
 </html>
