@@ -25,6 +25,13 @@
             background-color: midnightblue;
          color: #f4f4f4;   
         }
+        .btn-view{
+            padding: 5px 20px 5px 20px;
+            border: none;
+            outline: none;
+            background-color: rgb(35, 35, 138);
+            color: #f4f4f4;  
+        }
     </style>
 </head>
 <body>
@@ -102,6 +109,7 @@
     
                 const button = document.createElement('button');
                 button.textContent = 'View';
+                button.classList.add('btn-view');
                 button.onclick = () => {
                     document.querySelector('.heading').textContent = `Selected ID - ${user.id}`;
                 };
