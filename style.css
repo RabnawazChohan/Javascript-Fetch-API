@@ -1,0 +1,35 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+th {
+    background-color: #f4f4f4;
+    text-align: left;
+}
+.heading{
+    text-align: center; 
+    background-color: #f4f4f4;
+}
+thead tr th{
+    background-color: midnightblue;
+ color: #f4f4f4;   
+}
+.btn-view{
+    padding: 5px 20px 5px 20px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background-color: rgb(35, 35, 138);
+    color: #f4f4f4;  
+    
+}
+
+.btn-view:hover{
+    background-color: rgb(15, 15, 151);
+    color: #f4f4f4;
+    outline: auto;
+}
