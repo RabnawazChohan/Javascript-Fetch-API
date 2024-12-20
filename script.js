@@ -20,25 +20,25 @@ fetch(apiUrl)
 
     //800435
 
-    // data.forEach(user => {
+    data.forEach(user => {
         
-    //     const rows = data.map(user => `
-    //         <tr>
-    //             <td>${user.id}</td>
-    //             <td>${user.firstName}</td>
-    //             <td>${user.email}</td>
-    //             <td>${user.address.city}</td>
-    //             <td>${user.phone}</td>
-    //             <td>
-    //             <button class="btn-view" onclick="handleView(${user.id})">View</button>
-    //             </td>
-    //         </tr>
-    //     `).join(''); // Join all the rows into a single string
+        const rows = data.map(user => `
+            <tr>
+                <td>${user.id}</td>
+                <td>${user.firstName}</td>
+                <td>${user.email}</td>
+                <td>${user.address.city}</td>
+                <td>${user.phone}</td>
+                <td>
+                <button class="btn-view" onclick="handleView(${user.id})">View</button>
+                </td>
+            </tr>
+        `).join(''); // Join all the rows into a single string
            
-    //     // Insert the rows into the table body
-    //     tableBody.innerHTML = rows;
+        // Insert the rows into the table body
+        tableBody.innerHTML = rows;
 
-    // });
+    });
   })
   .catch(error => 
     console.error('Error fetching data:', error.message)
